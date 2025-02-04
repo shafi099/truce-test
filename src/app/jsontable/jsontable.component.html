@@ -1,0 +1,165 @@
+<!-- <p>jsontable works!</p> -->
+<div class="container-fluid nunito" style="height: 100vh; background-color: whitesmoke;">
+    
+  <div class="row">
+    <div class="col-12 text-center py-1 bg-black text-white d-flex flex-wrap justify-content-center gap-2" style="font-size: 12px;">
+      <p class="mb-1 fw-bold text-nowrap">Project By <span class="text-warning">Shafi Shaik</span></p>
+      <p class="mb-1 text-nowrap">
+        📧 <a href="mailto:shaikshafieluru@gmail.com" class="text-light text-decoration-none">shaikshafieluru@gmail.com</a>
+      </p>
+      <p class="mb-1 text-nowrap">
+        📞 <a href="tel:+919440267786" class="text-light text-decoration-none">+91 94402 67786</a>
+      </p>
+      <p class="mb-0 text-nowrap">
+        🌐 <a href="https://shafi-shaik.netlify.app/" target="_blank" class="text-light text-decoration-none">shafi-shaik.netlify.app</a>
+      </p>
+    </div>
+    
+    
+  </div>
+  
+  <div class="row mb-3">
+
+      <div class="col-12">
+        <div class="container   rounded-3 p-3">
+          <div class="row">
+
+            <div class="col-12 px-5">
+                <form [formGroup]="myForm" (ngSubmit)="submitForm()">
+    
+                    <div class="row">
+                      <div class="col-lg-1 col-5">
+                        <label>ID<span class="text-danger">*</span></label>
+                        <input
+                        [min]="1"
+                        type="number"
+                        autofocus
+                        class="fw-bold form-control form-control-sm"
+                        [class.border-danger]="errors && myForm.get('id')!.invalid"
+                        formControlName="id"
+                      />
+                      
+                      </div>
+                
+                      <div class="col-lg-5 col-12">
+                        <label>Rule Name<span class="text-danger">*</span></label>
+                        <input (input)="toCamelCaseWithSpaces($event)" type="text" class="fw-bold form-control form-control-sm"
+                        [class.border-danger]="errors && myForm.get('ruleName')!.invalid"
+                        formControlName="ruleName" />
+                      </div>
+    
+                      <div class="col-lg-2 col-12">
+                        <label>Type</label>
+                        <select class="form-select form-select-sm" formControlName="type">
+                          <option value="Match">Match</option>
+                          <option value="Filter">Filter</option>
+                        </select>
+                      </div>
+    
+                      <div class="col-lg-4 col-12">
+                        <label>Sub Type</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="subType" />
+                      </div>
+    
+                    </div>
+            
+                
+                    <div class="row mt-2 align-items-center">
+                      <div class="col-lg-3 col-12">
+                        <label>Domain</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="domain" />
+                      </div>
+                
+                      <div class="col-lg-2 col-12">
+                        <label>Impacted</label>
+                        <input type="number" class="form-control form-control-sm" formControlName="impacted" />
+                      </div>
+    
+                      <div class="col-lg-1 col-6">
+                        <label>Favourite</label>
+                        <select class="form-select form-select-sm" formControlName="favourite">
+                          <option value="Y">Yes</option>
+                          <option value="N">No</option>
+                        </select>
+                      </div>
+    
+                      <div class="col-lg-1 col-6">
+                        <label>Scheduled</label>
+                        <select class="form-select form-select-sm" formControlName="scheduled">
+                          <option value="Y">Yes</option>
+                          <option value="N">No</option>
+                        </select>
+                      </div>
+    
+                      <div class="col-lg-2 col-12">
+                        <label>Last Scheduled Date</label>
+                        <input type="datetime-local" class="form-control form-control-sm" formControlName="lastScheduledDate" />
+                      </div>
+    
+                      <div class="col-lg-1 col-6">
+                        <label>Alert</label>
+                        <select class="form-select form-select-sm" formControlName="alert">
+                          <option value="Y">Yes</option>
+                          <option value="N">No</option>
+                        </select>
+                      </div>
+    
+                      <div class="col-lg-2 col-6 d-flex flex-row gap-2">
+                        <label>Active</label>
+                        <input type="checkbox" class="form-check-input" formControlName="active" />
+                      </div>
+    
+    
+                    </div>
+                
+                    <div class="row align-items-center">
+                      <div class="col-lg-2 col-5">
+                        <button type="submit" class="btn btn-primary btn-sm mt-3">Create Rule</button>
+                      </div>
+
+                      <div class="col-lg-9 col-12">
+                        <span *ngIf="errors && !myForm?.valid" 
+                        class="text-danger pt-3 fw-bold">*Name & Rule Name Fields are required</span>
+                      </div>
+                    </div>
+                  </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row" >
+      <div class="col-12 mb-1">
+        <div class="row">
+          <div class="col-lg-2 col-6">
+            <button (click)="getSelected(agGrid.api);" class="rounded-2 btn w-100 btn-dark btn-sm">Get Selected Rows</button>
+          </div>
+          <div class="col-lg-10 col-12">
+            <textarea rows="1" [value]="selectedRows" style="font-size: 12px;"
+            [disabled]="true" readonly class="form-control-sm w-100"></textarea>
+          </div>
+
+        </div>
+
+      </div>
+        <div class="col-12" *ngIf="!isLoading">
+            <ag-grid-angular
+            #agGrid
+            style="width: 98%; resize: vertical ; overflow: auto; height: 400px; font-family: 'Courier New', Courier, monospace;"
+            class="ag-theme-alpine-dark nunito"
+            [rowSelection]="rowSelection"
+            animateRows="true"
+            [modules]="modules"
+            [rowData]="rowData"
+            [columnDefs]="columnDefs"
+            [gridOptions]="gridOptions"
+            [pagination]="true"
+            ></ag-grid-angular>
+        </div>
+
+        
+    </div>
+
+
+</div>
